@@ -1,49 +1,24 @@
+/* Contact Form Native Action Routing */
 const form = document.getElementById('contact-form');
-const submitBtn = form.querySelector('button[type="submit"]');
 
 if (form) {
   form.addEventListener('submit', function(e) {
-    e.preventDefault();
+    // 1. Inject the necessary access key directly into the form structure
+    let hiddenKeyInput = form.querySelector('input[name="access_key"]');
+    if (!hiddenKeyInput) {
+        hiddenKeyInput = document.createElement('input');
+        hiddenKeyInput.type = 'hidden';
+        hiddenKeyInput.name = 'access_key';
+        form.appendChild(hiddenKeyInput);
+    }
+    hiddenKeyInput.value = "ffa5a7ad-f06c-45aa-a9c2-af6d205d41fe";
 
-    const originalText = submitBtn.textContent;
-    submitBtn.textContent = "Sending...";
-    submitBtn.disabled = true;
-
-    // Use pure JSON data structure to bypass laptop CORS/Content-Type blocks
-    const formData = new FormData(form);
-    const object = Object.fromEntries(formData);
-    object.access_key = "ffa5a7ad-f06c-45aa-a9c2-af6d205d41fe";
-    const json = JSON.stringify(object);
-
-    fetch('https://web3forms.com', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: json
-    })
-    .then(async (response) => {
-        let res = await response.json();
-        if (response.status === 200 || res.success) {
-            alert("Thankyou! Your message was finally sent!");
-            form.reset();
-        } else {
-            alert("Submission error: " + res.message);
-        }
-    })
-    .catch(error => {
-        console.log(error);
-        alert("Network block. Please check your internet connection.");
-    })
-    .finally(() => {
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-    });
+    // 2. Let the form submit normally to Web3Forms without background fetch blocks
+    // This completely bypasses Chrome's local browser network block restrictions!
   });
 }
 
-/* Neon hover cursor script (adds soft light follow and hover interactions) */
+/* Neon hover cursor script (Kept completely intact) */
 (function(){
   function initNeon() {
     var cursor = document.createElement('div');
