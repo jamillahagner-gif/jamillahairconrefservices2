@@ -1,53 +1,38 @@
+const form = document.getElementById('contact-form');
+const submitBtn = form.querySelector('button[type="submit"]');
 
-document.addEventListener('DOMContentLoaded', function () {
-  var form = document.querySelector('.contact-form');
-  if (!form) return;
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-  form.addEventListener('submit', function (event) {
-    event.preventDefault();
+    const formData = new FormData(form);
+    formData.append("access_key", "ffa5a7ad-f06c-45aa-a9c2-af6d205d41fe");
 
-    var button = form.querySelector('button[type="submit"]');
-    var name = form.querySelector('input[name="name"]').value.trim();
-    var email = form.querySelector('input[name="email"]').value.trim();
-    var address = form.querySelector('input[name="address"]').value.trim();
-    var phone = form.querySelector('input[name="phone"]').value.trim();
-    var message = form.querySelector('textarea[name="message"]').value.trim();
+    const originalText = submitBtn.textContent;
 
-    if (!name || !email || !address || !phone || !message) {
-      alert('Please fill in all the required fields.');
-      return;
-    }
+    submitBtn.textContent = "Sending...";
+    submitBtn.disabled = true;
 
-    button.textContent = 'Sending...';
-    button.disabled = true;
+    try {
+        const response = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            body: formData
+        });
 
-    fetch(form.action, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json'
-      },
-      body: new FormData(form)
-    })
-      .then(function (response) {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+        const data = await response.json();
+
+        if (response.ok) {
+            alert("Success! Your message has been sent.");
+            form.reset();
+        } else {
+            alert("Error: " + data.message);
         }
-        return response.json();
-      })
-      .then(function () {
-        button.textContent = 'Message Sent';
-        setTimeout(function () {
-          button.textContent = 'Send Message';
-          button.disabled = false;
-          form.reset();
-        }, 2000);
-      })
-      .catch(function () {
-        button.textContent = 'Send Message';
-        button.disabled = false;
-        alert('Unable to send message right now. Please replace the Web3Forms access key in the form.');
-      });
-  });
+
+    } catch (error) {
+        alert("Something went wrong. Please try again.");
+    } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
 });
 
 /* Neon hover cursor script (adds soft light follow and hover interactions)
