@@ -1,3 +1,4 @@
+
 const form = document.getElementById('contact-form');
 const submitBtn = form.querySelector('button[type="submit"]');
 
@@ -5,7 +6,7 @@ form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const formData = new FormData(form);
-    formData.append("access_key", "ffa5a7ad-f06c-45aa-a9c2-af6d205d41fe");
+    formData.set("access_key", "ffa5a7ad-f06c-45aa-a9c2-af6d205d41fe");
 
     const originalText = submitBtn.textContent;
 
