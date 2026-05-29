@@ -1,43 +1,49 @@
 const form = document.getElementById('contact-form');
 const submitBtn = form.querySelector('button[type="submit"]');
 
-form.addEventListener('submit', async (e) => {
+if (form) {
+  form.addEventListener('submit', function(e) {
     e.preventDefault();
 
-    const formData = new FormData(form);
-    formData.set("access_key", "ffa5a7ad-f06c-45aa-a9c2-af6d205d41fe");
-
     const originalText = submitBtn.textContent;
-
     submitBtn.textContent = "Sending...";
     submitBtn.disabled = true;
 
-    try {
-        const response = await fetch("https://web3forms.com", {
-            method: "POST",
-            body: formData
-        });
+    // Use pure JSON data structure to bypass laptop CORS/Content-Type blocks
+    const formData = new FormData(form);
+    const object = Object.fromEntries(formData);
+    object.access_key = "ffa5a7ad-f06c-45aa-a9c2-af6d205d41fe";
+    const json = JSON.stringify(object);
 
-        const data = await response.json();
-
-        if (response.ok) {
-            // Updated your custom plain alert text here
+    fetch('https://web3forms.com', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: json
+    })
+    .then(async (response) => {
+        let res = await response.json();
+        if (response.status === 200 || res.success) {
             alert("Thankyou! Your message was finally sent!");
             form.reset();
         } else {
-            alert("Error: " + data.message);
+            alert("Submission error: " + res.message);
         }
-
-    } catch (error) {
-        alert("Something went wrong. Please try again.");
-    } finally {
+    })
+    .catch(error => {
+        console.log(error);
+        alert("Network block. Please check your internet connection.");
+    })
+    .finally(() => {
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
-    }
-});
+    });
+  });
+}
 
-/* Neon hover cursor script (adds soft light follow and hover interactions)
-   Only activates for elements with the `neon-hover` class. */
+/* Neon hover cursor script (adds soft light follow and hover interactions) */
 (function(){
   function initNeon() {
     var cursor = document.createElement('div');
