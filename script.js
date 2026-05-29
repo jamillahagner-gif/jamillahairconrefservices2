@@ -1,24 +1,5 @@
-/* Contact Form Native Action Routing */
-const form = document.getElementById('contact-form');
-
-if (form) {
-  form.addEventListener('submit', function(e) {
-    // 1. Inject the necessary access key directly into the form structure
-    let hiddenKeyInput = form.querySelector('input[name="access_key"]');
-    if (!hiddenKeyInput) {
-        hiddenKeyInput = document.createElement('input');
-        hiddenKeyInput.type = 'hidden';
-        hiddenKeyInput.name = 'access_key';
-        form.appendChild(hiddenKeyInput);
-    }
-    hiddenKeyInput.value = "ffa5a7ad-f06c-45aa-a9c2-af6d205d41fe";
-
-    // 2. Let the form submit normally to Web3Forms without background fetch blocks
-    // This completely bypasses Chrome's local browser network block restrictions!
-  });
-}
-
-/* Neon hover cursor script (Kept completely intact) */
+/* Neon hover cursor script (Kept entirely intact for interactive styling)
+   Only activates for elements with the `neon-hover` class. */
 (function(){
   function initNeon() {
     var cursor = document.createElement('div');
