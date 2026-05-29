@@ -1,4 +1,3 @@
-
 const form = document.getElementById('contact-form');
 const submitBtn = form.querySelector('button[type="submit"]');
 
@@ -14,7 +13,7 @@ form.addEventListener('submit', async (e) => {
     submitBtn.disabled = true;
 
     try {
-        const response = await fetch("https://api.web3forms.com/submit", {
+        const response = await fetch("https://web3forms.com", {
             method: "POST",
             body: formData
         });
@@ -22,7 +21,8 @@ form.addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok) {
-            alert("Success! Your message has been sent.");
+            // Updated your custom plain alert text here
+            alert("Thankyou! Your message was finally sent!");
             form.reset();
         } else {
             alert("Error: " + data.message);
@@ -59,7 +59,6 @@ form.addEventListener('submit', async (e) => {
         el.classList.remove('neon-hover-active');
       });
       el.addEventListener('mousemove', function(e){
-        // expose local mouse coords (optional, not required for the cursor)
         var rect = el.getBoundingClientRect();
         var x = e.clientX - rect.left;
         var y = e.clientY - rect.top;
