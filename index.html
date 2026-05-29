@@ -131,7 +131,7 @@
             </div>
             <div>
               <strong>Email</strong>
-              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jamillahairconrefservices@gmail.com" target="_blank" rel="noreferrer">jamillahairconrefservices@gmail.com</a>
+              <a href="mailto:jamillahairconrefservices@gmail.com">jamillahairconrefservices@gmail.com</a>
             </div>
             <div>
               <strong>Store Address</strong>
@@ -147,7 +147,11 @@
             </div>
           </div>
         </div>
-        <form class="contact-form">
+        <form id="contact-form" class="contact-form" action="https://script.google.com/macros/s/PUT_YOUR_SCRIPT_ID_HERE/exec" method="POST" accept-charset="UTF-8">
+          <input type="hidden" name="_subject" value="New service inquiry from website" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_next" value="https://jamillahairconrefservices.com/" />
           <label>
             Name
             <input type="text" name="name" placeholder="Your name" required />

@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function () {
   var form = document.querySelector('.contact-form');
   if (!form) return;
@@ -5,41 +6,49 @@ document.addEventListener('DOMContentLoaded', function () {
   form.addEventListener('submit', function (event) {
     event.preventDefault();
 
-    var recipient = 'jamillahairconrefservices@gmail.com';
-    var name = form.elements.name.value.trim();
-    var email = form.elements.email.value.trim();
-    var address = form.elements.address.value.trim();
-    var phone = form.elements.phone.value.trim();
-    var message = form.elements.message.value.trim();
-
     var button = form.querySelector('button[type="submit"]');
-    button.textContent = 'Opening Email...';
+    var name = form.querySelector('input[name="name"]').value.trim();
+    var email = form.querySelector('input[name="email"]').value.trim();
+    var address = form.querySelector('input[name="address"]').value.trim();
+    var phone = form.querySelector('input[name="phone"]').value.trim();
+    var message = form.querySelector('textarea[name="message"]').value.trim();
+
+    if (!name || !email || !address || !phone || !message) {
+      alert('Please fill in all the required fields.');
+      return;
+    }
+
+    button.textContent = 'Sending...';
     button.disabled = true;
 
-    var subject = 'Service Inquiry from ' + (name || 'Website Visitor');
-    var body = [
-      'Name: ' + name,
-      'Email: ' + email,
-      'Address: ' + address,
-      'Phone: ' + phone,
-      '',
-      'Message:',
-      message,
-      '',
-      'Sent from Jamillah Aircon & Refrigerator Services website.'
-    ].join('\n');
-
-    var mailto = 'mailto:' + recipient +
-      '?subject=' + encodeURIComponent(subject) +
-      '&body=' + encodeURIComponent(body);
-
-    window.location.href = mailto;
-
-    setTimeout(function () {
-      button.textContent = 'Send Message';
-      button.disabled = false;
-      form.reset();
-    }, 2000);
+    fetch(form.action, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json'
+      },
+      body: new FormData(form)
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json().catch(function () {
+          return {};
+        });
+      })
+      .then(function () {
+        button.textContent = 'Message Sent';
+        setTimeout(function () {
+          button.textContent = 'Send Message';
+          button.disabled = false;
+          form.reset();
+        }, 2000);
+      })
+      .catch(function () {
+        button.textContent = 'Send Message';
+        button.disabled = false;
+        alert('Unable to send message right now. Please try again in a moment.');
+      });
   });
 });
 
