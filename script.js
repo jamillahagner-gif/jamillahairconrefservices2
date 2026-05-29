@@ -32,9 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        return response.json().catch(function () {
-          return {};
-        });
+        return response.json();
       })
       .then(function () {
         button.textContent = 'Message Sent';
@@ -47,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
       .catch(function () {
         button.textContent = 'Send Message';
         button.disabled = false;
-        alert('Unable to send message right now. Please try again in a moment.');
+        alert('Unable to send message right now. Please replace the Web3Forms access key in the form.');
       });
   });
 });
